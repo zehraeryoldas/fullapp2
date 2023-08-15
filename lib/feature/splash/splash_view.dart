@@ -15,25 +15,22 @@ class SplashView extends ConsumerStatefulWidget {
 }
 
 class _SplashViewState extends ConsumerState<SplashView> {
-  //splash providerı burada çağırdık
   final splashProvider =
       StateNotifierProvider<SplasProvider, SplashState>((ref) {
     return SplasProvider();
   });
-  //ekran olarak bir değişiklik yapmayacağız ama
-  //init state de kodlayacağız
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    ''.version;
-    ref.read(splashProvider.notifier).checkApplicationVersion(''.version);
+    ''.version; //version aldık burada
+    ref.read(splashProvider.notifier).checkApplicationVersion(''.ext.version);
   }
 
   @override
   Widget build(BuildContext context) {
-    //listen ile dinliyoruz
     ref.listen(splashProvider, (previous, next) {
       //burada bir logic yazıyoruz
       if (next.isRequiredForceUpdate ?? false) {
@@ -49,6 +46,9 @@ class _SplashViewState extends ConsumerState<SplashView> {
 
         if (next.isRedirectHome!) //eğer next isRedirectHome true ise
         {
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => const HomeView()));
+          // MaterialPageRoute(builder: (context) => const HomeView());
           context.navigateToPage(const HomeView());
         } else {}
       }
@@ -65,22 +65,9 @@ class _SplashViewState extends ConsumerState<SplashView> {
             const SizedBox(
               height: 30,
             ),
-            // StringContants.name
-
-            // AnimatedTextKit(
-            //   animatedTexts: [
-            //     WavyAnimatedText(
-            //       StringContants.appName,
-            //       textStyle: context.textTheme.headlineSmall!.copyWith(
-            //         color: ColorConstants.white,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   ],
-            // ),
 
             //!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //her zaman parçalamayı bir strateji haline getirmeliyiz.
+            //her zaman parçalamayı bir strateji haline getirmeliyiz. mesela wavy boldu direkt burada da yazarız ama
             //hızlı olması için
             const WavyBoldText(title: StringContants.appName)
           ],

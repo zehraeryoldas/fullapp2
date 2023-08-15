@@ -5,5 +5,4 @@ class StringContants {
   //bütün metotlar private olacağı için bunu kapatıyoruz
   const StringContants._();
   static const String appName = "Nuntium";
-  static const Text name = Text(appName);
 }
