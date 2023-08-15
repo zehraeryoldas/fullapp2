@@ -44,9 +44,14 @@ dependencies:
   #firebase
   firebase_core: ^2.15.0
   cloud_firestore: ^4.8.4
+  firebase_auth: ^4.7.2
+  firebase_ui_auth: ^1.6.2
+  firebase_ui_oauth_google: ^1.2.7
 
   #utility
   animated_text_kit: ^4.2.2
+  shared_preferences: ^2.2.0
+ 
 
 
 dev_dependencies:
