@@ -4,5 +4,6 @@ import 'package:flutter/material.dart';
 class StringContants {
   //bütün metotlar private olacağı için bunu kapatıyoruz
   const StringContants._();
-  static const String appName = "Flutter demo";
+  static const String appName = "Nuntium";
+  static const Text name = Text(appName);
 }
