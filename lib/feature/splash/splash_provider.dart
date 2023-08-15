@@ -61,7 +61,6 @@ async {
 
 //aynı stateler gelmesi ve koruması adına bunu equtable ile sarmalıyoruz.
 //hem referans eşitliğini kurtarmış oluyoruz hem de referans kontrolü açısından
-//
 class SplashState extends Equatable {
   const SplashState({
     this.isRequiredForceUpdate,
