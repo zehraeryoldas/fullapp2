@@ -25,6 +25,11 @@ class _AuthenticationViewState extends ConsumerState<AuthenticationView> {
     // TODO: implement initState
     super.initState();
     print(FirebaseAuth.instance.currentUser);
+    checkUser(FirebaseAuth.instance.currentUser);
+  }
+
+  void checkUser(User? user) {
+    ref.read(authProvider.notifier).fetchUserDetail(user);
   }
 
   @override
@@ -34,6 +39,7 @@ class _AuthenticationViewState extends ConsumerState<AuthenticationView> {
         actions: [
           AuthStateChangeAction<SignedIn>((context, state) {
             if (state.user != null) {
+              checkUser(state.user);
               print("Okay");
             }
           }),
@@ -82,6 +88,17 @@ class _AuthenticationViewState extends ConsumerState<AuthenticationView> {
                       ),
                     ),
                   ),
+                  if (ref.watch(authProvider).isRedirect)
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        StringContants.continueToApp,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

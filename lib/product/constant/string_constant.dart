@@ -7,4 +7,6 @@ class StringContants {
   static const String appName = "Nuntium";
   static const loginWelcomeBack = "Welcome Back ";
   static const loginwelcomDetail = "Seni yeniden gördüğüme mennun oldum";
+
+  static const continueToApp = "continue to app";
 }
