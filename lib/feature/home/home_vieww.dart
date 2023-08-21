@@ -101,7 +101,10 @@ class _HorizontalCard extends StatelessWidget {
     return Stack(children: [
       Padding(
         padding: context.padding.onlyRightNormal,
-        child: Image.network(_BrowseHorixontalListview.dummyImage),
+        child: Image.network(
+          _BrowseHorixontalListview.dummyImage,
+          errorBuilder: (context, error, stackTrace) => const Placeholder(),
+        ),
       ),
       Positioned.fill(
         child: Padding(
@@ -186,6 +189,8 @@ class _RecommendedListView extends StatelessWidget {
                 Image.network(
                   _RecommendedListView.dummyImage,
                   height: 96,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Placeholder(),
                 ),
                 const Expanded(
                   child: ListTile(
