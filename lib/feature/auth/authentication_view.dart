@@ -4,6 +4,8 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fullapp2/product/constant/string_constant.dart';
+import 'package:fullapp2/product/widget/text/sub_title_text.dart';
+import 'package:fullapp2/product/widget/text/title_text.dart';
 
 import 'authentication_provider.dart';
 
@@ -52,17 +54,10 @@ class _AuthenticationViewState extends ConsumerState<AuthenticationView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    StringContants.loginWelcomeBack,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  const TitleText(
+                    value: StringContants.homeBrowse,
                   ),
-                  const Text(
-                    StringContants.loginwelcomDetail,
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
-                  ),
+                  const SubTitleText(value: StringContants.loginwelcomDetail),
                   Theme(
                     data: ThemeData(
                         outlinedButtonTheme: OutlinedButtonThemeData(

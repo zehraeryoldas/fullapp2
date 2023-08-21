@@ -6,7 +6,7 @@ import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fullapp2/feature/auth/authentication_view.dart';
+import 'package:fullapp2/feature/home/home_vieww.dart';
 import 'package:fullapp2/firebase_options.dart';
 import 'package:fullapp2/product/constant/string_constant.dart';
 import 'package:fullapp2/product/initialize/app_cache.dart';
@@ -44,6 +44,6 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: StringContants.appName,
-        home: AuthenticationView());
+        home: HomeVieww());
   }
 }

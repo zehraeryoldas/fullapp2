@@ -9,4 +9,9 @@ class StringContants {
   static const loginwelcomDetail = "Seni yeniden gördüğüme mennun oldum";
 
   static const continueToApp = "continue to app";
+  static const homeBrowse = "Browse";
+  static const homeMessage = "I am happy to see you again";
+  static const recommended = "Recommended for you";
+  static const seeAll = "See all";
+  static const search = "Search";
 }
