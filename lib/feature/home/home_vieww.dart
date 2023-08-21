@@ -1,30 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fullapp2/feature/home/home_provider.dart';
 import 'package:fullapp2/feature/home/sub_view/home_chips.dart';
+import 'package:fullapp2/feature/home/sub_view/home_news_list_view.dart';
+import 'package:fullapp2/product/widget/card/home_news_card.dart';
 import 'package:kartal/kartal.dart';
 
 import '../../product/constant/color_constants.dart';
 import '../../product/constant/string_constant.dart';
-import '../../product/enum/widget_size.dart';
 import '../../product/widget/text/sub_title_text.dart';
 import '../../product/widget/text/title_text.dart';
 
-class HomeVieww extends StatelessWidget {
+final HomeProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {
+  return HomeNotifier();
+});
+
+class HomeVieww extends ConsumerStatefulWidget {
   const HomeVieww({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeViewwState();
+}
+
+class _HomeViewwState extends ConsumerState<HomeVieww> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() {
+      //mikrotask şunu sağlar frame çizildikten sonra call eder.
+      ref.read(HomeProvider.notifier).fetchAndLoad();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          children: const [
-            _Header(),
-            _CustomField(),
-            _TagListView(),
-            _BrowseHorixontalListview(),
-            _RecommendedHeader(),
-            _RecommendedListView()
-          ],
-        ),
+        child: Stack(children: [
+          ListView(
+            children: const [
+              _Header(),
+              _CustomField(),
+              _TagListView(),
+              _BrowseHorixontalListview(),
+              _RecommendedHeader(),
+              _RecommendedListView(),
+              HomeListView()
+            ],
+          ),
+          if (ref.watch(HomeProvider).isLoading ?? false)
+            const Center(child: CircularProgressIndicator())
+        ]),
       ),
     );
   }
@@ -49,99 +76,52 @@ class _CustomField extends StatelessWidget {
   }
 }
 
-class _TagListView extends StatelessWidget {
+class _TagListView extends ConsumerWidget {
   const _TagListView();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tagItems = ref.watch(HomeProvider).tag ?? [];
     return SizedBox(
       height: context.dynamicHeight(.1),
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 4,
+          itemCount: tagItems.length ?? 0,
           itemBuilder: (context, index) {
-            if (index.isOdd) {
-              return const ActiveChip();
+            final tagitem = tagItems[index];
+            if (tagitem.active ?? false) {
+              return ActiveChip(
+                tag: tagitem,
+              );
             }
-            return const PassiveChip();
+            return PassiveChip(
+              tag: tagitem,
+            );
+            // if (index.isOdd) {
+            //   return const ActiveChip();
+            // }
+            // return const PassiveChip();
           }),
     );
   }
 }
 
-class _BrowseHorixontalListview extends StatelessWidget {
+//riverpod olduğu için widgetlarımızı consumera çevirdik
+class _BrowseHorixontalListview extends ConsumerWidget {
   const _BrowseHorixontalListview();
 
-  static const dummyImage =
-      "https://firebasestorage.googleapis.com/v0/b/fullapp-5167d.appspot.com/o/white_house.png?alt=media&token=c454d317-59b9-41a7-9fa3-5396c6a39e4a";
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final newsItem = ref.watch(HomeProvider).news;
     return SizedBox(
       height: context.dynamicHeight(.2),
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 4,
+          itemCount: newsItem?.length ?? 0,
           itemBuilder: (context, index) {
-            return const _HorizontalCard(dummyImage: dummyImage);
+            return HomeNewsCard(newsItem: newsItem?[index]);
           }),
     );
-  }
-}
-
-class _HorizontalCard extends StatelessWidget {
-  const _HorizontalCard({
-    required this.dummyImage,
-  });
-
-  final String dummyImage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(children: [
-      Padding(
-        padding: context.padding.onlyRightNormal,
-        child: Image.network(
-          _BrowseHorixontalListview.dummyImage,
-          errorBuilder: (context, error, stackTrace) => const Placeholder(),
-        ),
-      ),
-      Positioned.fill(
-        child: Padding(
-          padding: context.padding.normal,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.bookmark_outline,
-                    color: ColorConstants.white,
-                    size: ImageSize.iconNormal.value.toDouble(),
-                  )),
-              const Spacer(),
-              Padding(
-                padding: context.padding.low,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TitleText(
-                      value: "Politics",
-                      color: ColorConstants.grayPrimary,
-                    ),
-                    Text(
-                      "The lastest situation in the presidential election",
-                      style: context.textTheme.titleMedium!
-                          .copyWith(color: ColorConstants.purpleDark),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      )
-    ]);
   }
 }
 
