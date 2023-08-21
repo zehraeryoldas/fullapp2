@@ -83,46 +83,62 @@ class _BrowseHorixontalListview extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemCount: 4,
           itemBuilder: (context, index) {
-            return Stack(children: [
-              Padding(
-                padding: context.padding.onlyRightNormal,
-                child: Image.network(_BrowseHorixontalListview.dummyImage),
-              ),
-              Positioned.fill(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.bookmark_outline,
-                          color: ColorConstants.white,
-                          size: ImageSize.iconNormal.value.toDouble(),
-                        )),
-                    const Spacer(),
-                    Padding(
-                      padding: context.padding.low,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const TitleText(
-                            value: "Politics",
-                            color: ColorConstants.grayPrimary,
-                          ),
-                          Text(
-                            "The lastest situation in the presidential election",
-                            style: context.textTheme.headlineSmall!
-                                .copyWith(color: ColorConstants.purpleDark),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ]);
+            return const _HorizontalCard(dummyImage: dummyImage);
           }),
     );
+  }
+}
+
+class _HorizontalCard extends StatelessWidget {
+  const _HorizontalCard({
+    required this.dummyImage,
+  });
+
+  final String dummyImage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      Padding(
+        padding: context.padding.onlyRightNormal,
+        child: Image.network(_BrowseHorixontalListview.dummyImage),
+      ),
+      Positioned.fill(
+        child: Padding(
+          padding: context.padding.normal,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.bookmark_outline,
+                    color: ColorConstants.white,
+                    size: ImageSize.iconNormal.value.toDouble(),
+                  )),
+              const Spacer(),
+              Padding(
+                padding: context.padding.low,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const TitleText(
+                      value: "Politics",
+                      color: ColorConstants.grayPrimary,
+                    ),
+                    Text(
+                      "The lastest situation in the presidential election",
+                      style: context.textTheme.titleMedium!
+                          .copyWith(color: ColorConstants.purpleDark),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      )
+    ]);
   }
 }
 
@@ -152,6 +168,8 @@ class _RecommendedHeader extends StatelessWidget {
 
 class _RecommendedListView extends StatelessWidget {
   const _RecommendedListView();
+  static const dummyImage =
+      "https://firebasestorage.googleapis.com/v0/b/fullapp-5167d.appspot.com/o/white_house.png?alt=media&token=c454d317-59b9-41a7-9fa3-5396c6a39e4a";
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +181,22 @@ class _RecommendedListView extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: context.padding.onlyTopLow,
-            child: const Placeholder(),
+            child: Row(
+              children: [
+                Image.network(
+                  _RecommendedListView.dummyImage,
+                  height: 96,
+                ),
+                const Expanded(
+                  child: ListTile(
+                    minLeadingWidth: 96,
+                    title: Text("UI/UX Design"),
+                    subtitle: Text(
+                        "A simple trick for creating color palattes quickly"),
+                  ),
+                )
+              ],
+            ),
           );
         });
   }
