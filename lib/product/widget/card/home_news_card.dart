@@ -37,7 +37,7 @@ class HomeNewsCard extends StatelessWidget {
                   icon: Icon(
                     Icons.bookmark_outline,
                     color: ColorConstants.white,
-                    size: ImageSize.iconNormal.value.toDouble(),
+                    size: WidgetSize.iconNormal.value.toDouble(),
                   )),
               const Spacer(),
               Padding(
