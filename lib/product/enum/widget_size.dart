@@ -1,7 +1,7 @@
-enum ImageSize {
+enum WidgetSize {
   buttonNormal(56),
   iconNormal(30);
 
   final int value;
-  const ImageSize(this.value);
+  const WidgetSize(this.value);
 }
