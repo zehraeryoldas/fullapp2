@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fullapp2/feature/home/home_create/home_create_view.dart';
 import 'package:fullapp2/feature/home/home_provider.dart';
 import 'package:fullapp2/feature/home/sub_view/home_chips.dart';
-import 'package:fullapp2/feature/home/sub_view/home_news_list_view.dart';
+import 'package:fullapp2/feature/home/sub_view/home_search_Delegate.dart';
+import 'package:fullapp2/product/model/tag.dart';
 import 'package:fullapp2/product/widget/card/home_news_card.dart';
 import 'package:kartal/kartal.dart';
 
 import '../../product/constant/color_constants.dart';
 import '../../product/constant/string_constant.dart';
+import '../../product/widget/card/recommended.dart';
 import '../../product/widget/text/sub_title_text.dart';
 import '../../product/widget/text/title_text.dart';
 
@@ -23,6 +26,14 @@ class HomeVieww extends ConsumerStatefulWidget {
 }
 
 class _HomeViewwState extends ConsumerState<HomeVieww> {
+  final TextEditingController _controller = TextEditingController();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -31,22 +42,34 @@ class _HomeViewwState extends ConsumerState<HomeVieww> {
       //mikrotask şunu sağlar frame çizildikten sonra call eder.
       ref.read(HomeProvider.notifier).fetchAndLoad();
     });
+    ref.read(HomeProvider.notifier).addListener((state) {
+      if (state.selectedTag != null) {
+        _controller.text = state.selectedTag?.name ?? '';
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.large(
+        onPressed: () {
+          context.navigateToPage(const HomeCreateView(),
+              type: SlideType.BOTTOM);
+        },
+        child: const Icon(Icons.add),
+      ),
       body: SafeArea(
         child: Stack(children: [
           ListView(
-            children: const [
-              _Header(),
-              _CustomField(),
-              _TagListView(),
-              _BrowseHorixontalListview(),
-              _RecommendedHeader(),
-              _RecommendedListView(),
-              HomeListView()
+            children: [
+              const _Header(),
+              _CustomField(_controller),
+              const _TagListView(),
+              const _BrowseHorixontalListview(),
+              const _RecommendedHeader(),
+              const RecommendedListView(),
+              //  HomeListView()
             ],
           ),
           if (ref.watch(HomeProvider).isLoading ?? false)
@@ -57,13 +80,23 @@ class _HomeViewwState extends ConsumerState<HomeVieww> {
   }
 }
 
-class _CustomField extends StatelessWidget {
-  const _CustomField();
+class _CustomField extends ConsumerWidget {
+  const _CustomField(this.controller);
 
+  final TextEditingController controller;
   @override
-  Widget build(BuildContext context) {
-    return const TextField(
-      decoration: InputDecoration(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return TextField(
+      controller: controller,
+      onTap: () async {
+        final result = await showSearch<Tag?>(
+            context: context,
+            delegate: HomeSearchDelegate(
+                ref.read(HomeProvider.notifier).fullTagList));
+
+        ref.read(HomeProvider.notifier).updateSelectedTag(result);
+      },
+      decoration: const InputDecoration(
         suffixIcon: Icon(Icons.mic_outlined),
         prefixIcon: Icon(Icons.search_off_outlined),
         border: OutlineInputBorder(
@@ -146,44 +179,6 @@ class _RecommendedHeader extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class _RecommendedListView extends StatelessWidget {
-  const _RecommendedListView();
-  static const dummyImage =
-      "https://firebasestorage.googleapis.com/v0/b/fullapp-5167d.appspot.com/o/white_house.png?alt=media&token=c454d317-59b9-41a7-9fa3-5396c6a39e4a";
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        physics: const ClampingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        itemCount: 5,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: context.padding.onlyTopLow,
-            child: Row(
-              children: [
-                Image.network(
-                  _RecommendedListView.dummyImage,
-                  height: 96,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Placeholder(),
-                ),
-                const Expanded(
-                  child: ListTile(
-                    minLeadingWidth: 96,
-                    title: Text("UI/UX Design"),
-                    subtitle: Text(
-                        "A simple trick for creating color palattes quickly"),
-                  ),
-                )
-              ],
-            ),
-          );
-        });
   }
 }
 
