@@ -36,6 +36,7 @@ class CategoryModel
     return CategoryModel(
       detail: json['detail'] as String?,
       name: json['name'] as String?,
+      id: json['id'] as String?,
     );
   }
 }
