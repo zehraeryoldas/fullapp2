@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fullapp2/feature/home/home_create/home_logic.dart';
 import 'package:fullapp2/product/constant/index.dart';
 import 'package:fullapp2/product/enum/widget_size.dart';
 import 'package:fullapp2/product/model/category.dart';
@@ -16,23 +17,32 @@ class HomeCreateView extends StatefulWidget {
 
 //class _HomeCreateViewState extends State<HomeCreateView> with FirebaseUtility {
 class _HomeCreateViewState extends State<HomeCreateView> {
-  List<CategoryModel> category = [];
-  CategoryModel? selectedCategory;
+  //List<CategoryModel> category = [];
+  //CategoryModel? selectedCategory;
+  HomeLogic? _homeLogic;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _fetchInitialCategory();
+    _homeLogic = HomeLogic();
   }
 
-  Future<void> _fetchInitialCategory() async {
-    final response = await fetchList<CategoryModel, CategoryModel>(
-        CategoryModel(), FirebaseCollections.category);
+//logiclerimi logic sayfasında yazmalıyım
+  // Future<void> _fetchInitialCategory() async {
+  //   final response = await fetchList<CategoryModel, CategoryModel>(
+  //       CategoryModel(), FirebaseCollections.category);
 
-    setState(() {
-      category = response ?? [];
-    });
+  //   setState(() {
+  //     category = response ?? [];
+  //   });
+  // }
+
+  //yorum satırına alınan fonksiyonun sadeleştirilmiş halidir
+  Future<void> _fetchInitialCategory() async {
+    await _homeLogic?.fetchAllCategory();
+    setState(() {});
   }
 
   @override
@@ -40,7 +50,7 @@ class _HomeCreateViewState extends State<HomeCreateView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "add new item",
+          StringContants.formAppbarTitle,
         ),
         centerTitle: false,
       ),
@@ -73,10 +83,8 @@ class _HomeCreateViewState extends State<HomeCreateView> {
               //     }),
 
               _HomeDropdownButton(
-                selectedCategory: (value) {
-                  selectedCategory = value;
-                },
-                category: category,
+                selectedCategory: _homeLogic!.updateCategory,
+                category: _homeLogic!.categories,
               ),
               context.emptySizedHeightBoxLow,
               TextFormField(
@@ -85,13 +93,21 @@ class _HomeCreateViewState extends State<HomeCreateView> {
                     border: OutlineInputBorder()),
               ),
               InkWell(
-                onTap: () {},
-                child: SizedBox(
-                    height: context.dynamicHeight(0.2),
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: ColorConstants.grayPrimary)))),
+                onTap: () async {
+                  await _homeLogic?.imagePick();
+                },
+                child: Padding(
+                  padding: context.padding.low,
+                  child: SizedBox(
+                      height: context.dynamicHeight(0.2),
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: ColorConstants.purpleDark)),
+                          child: _homeLogic?.selectedFileBytes != null
+                              ? Image.memory(_homeLogic!.selectedFileBytes!)
+                              : const Icon(Icons.abc))),
+                ),
               ),
               ElevatedButton.icon(
                 onPressed: () {},
