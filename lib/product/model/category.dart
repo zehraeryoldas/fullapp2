@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import '../utility/base/base_model.dart';
 
+@immutable
 class CategoryModel
     with EquatableMixin, IdModel, BaseFirebaseModel<CategoryModel> {
   final String? detail;

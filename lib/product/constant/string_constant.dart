@@ -14,4 +14,7 @@ class StringContants {
   static const recommended = "Recommended for you";
   static const seeAll = "See all";
   static const search = "Search";
+  static const dropDown = "Select Category";
+  static const buttonSave = "Save";
+  static const hinText = "title";
 }
